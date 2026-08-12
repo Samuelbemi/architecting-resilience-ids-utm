@@ -1,0 +1,54 @@
+3.0	Defence in Depth for Windows Enterprise Environments: This section explores how the principles of defence in depth can be practically applied within a Windows enterprise security architecture. It identifies the critical security layers involved, examines their individual roles and contributions, and demonstrates how their combined implementation strengthens an organisation’s ability to prevent, detect, and respond to evolving cyber threats while improving overall security resilience.
+3.1 The Importance of Defence in Depth for Enterprise Security: Modern enterprise environments cannot rely on a single security mechanism because cyber-attacks often involve multiple stages, from initial compromise to persistence, lateral movement, and data theft. Defense in-depth provides multiple security barriers, increased threat detection capability, improved incident visibility, reduced impact of a successful compromise, greater organizational security resilience
+3.2 Windows Endpoint Security Layer: Windows represents the first layer of defence within an enterprise security architecture. It provides a range of built-in security capabilities designed to protect individual endpoints, including Microsoft Defender Antivirus, Windows Defender Firewall, SmartScreen protection, BitLocker encryption, User Account Control (UAC), security updates, and patch management. As the primary security boundary between users and potential threats, endpoint protection provides the foundation upon which additional security controls can be built. However, endpoint security alone cannot provide complete protection against the complexity of modern enterprise cyber threats.
+Therefore, Windows endpoint security must function as an integral component of a wider defence-in-depth security architecture, where additional layers of protection, including intrusion detection, network security controls, and security monitoring, provide complementary capabilities to strengthen the organisation’s overall security posture.
+
+3.3 Application and Data Security Layer: The application and data security layer focuses on protecting organisational applications, information assets, and sensitive business data from unauthorised access, modification, disclosure, or misuse. Within a Windows enterprise environment, this layer ensures that security extends beyond the operating system and endpoint device to the applications and data that support critical business operations.
+Key security controls within this layer include application security controls, user permissions, access control mechanisms, data protection measures, encryption, and the implementation of the principle of least privilege. Application security controls help reduce the risk associated with vulnerable or malicious applications, while access control and user permission management ensure that users are granted only the level of access required to perform their authorised responsibilities. 
+Encryption provides additional protection by ensuring that sensitive information remains protected even if unauthorised access occurs, while the principle of least privilege reduces the potential impact of compromised accounts by limiting excessive user or application permissions.
+Protecting applications and data is a critical component of a defence-in-depth security architecture because a compromised endpoint does not necessarily mean that an attacker should gain unrestricted access to organisational resources. By implementing appropriate application and data security controls, organisations can reduce the impact of security incidents, limit unauthorised access, and strengthen the overall resilience of the enterprise security environment.
+3.4 Network Security and Intrusion Detection Layer: The network security and intrusion detection layer provides an additional level of protection within a defence-in-depth security architecture by focusing on monitoring, analysing, and identifying potentially malicious activity across enterprise network communications. While endpoint security controls protect individual Windows devices, network-level security provides broader visibility into activities occurring between systems, services, and external connections.
+This layer incorporates key security capabilities, including network monitoring, traffic inspection, suspicious activity detection, security alert generation, and visibility into both internal and external communications. By analysing network traffic patterns and identifying indicators of compromise, organisations can detect malicious behaviour that may not be visible or identifiable at the endpoint level.
+An Intrusion Detection System (IDS) plays a critical role within this layer by continuously monitoring network activity for suspicious behaviour, unauthorised access attempts, abnormal communication patterns, and other indicators associated with potential cyber threats. Unlike endpoint security controls that primarily focus on protecting individual devices, IDS provides additional network visibility that supports early detection and security incident investigation.
+In this research, Snort is evaluated as the IDS component responsible for providing network monitoring, threat detection, and security alert capabilities within the Windows 11 enterprise security architecture. The evaluation demonstrates how IDS can complement endpoint security by providing an additional detection layer that strengthens an organisation’s overall security posture.
+3.5 Network Perimeter Security Layer: The network perimeter security layer provides protection at the boundary between the enterprise environment and external networks. This layer focuses on controlling, monitoring, and managing network traffic entering and leaving the organisation’s infrastructure. Within a defence-in-depth security architecture, Unified Threat Management (UTM) technology operates at this layer by integrating multiple network security capabilities into a centralised security platform.
+Key security functions provided by the UTM layer include firewall protection, network traffic filtering, access control, perimeter monitoring, and network segmentation. These controls help organisations regulate communication flows, restrict unauthorised access, reduce exposure to external threats, and improve visibility into network activities occurring between internal systems and external networks.
+The UTM layer plays an important role in enterprise security by providing an additional protective barrier beyond individual Windows endpoints. While endpoint security focuses on protecting user devices, perimeter security controls help manage broader network-level risks by controlling how systems communicate and by enforcing security policies at the network boundary. In this research, pfSense is evaluated as the UTM platform responsible for providing firewall and network security capabilities within the Windows enterprise security architecture. The evaluation examines how UTM functionality complements endpoint protection and intrusion detection by providing additional network-level control, monitoring, and protection capabilities that contribute to an organisation’s overall security posture.
+3.6 Security Monitoring and Incident Response Layer: The security monitoring and incident response layer provides the operational capability required to identify, analyse, investigate, and respond to security events within an enterprise environment. While preventive security controls are essential for reducing the likelihood of successful attacks, effective cybersecurity requires continuous monitoring and the ability to detect, investigate, and respond to incidents when security controls are bypassed or compromised.
+This layer involves monitoring security events across the enterprise environment, reviewing system and network logs, analysing security alerts, identifying indicators of compromise, conducting security investigations, and implementing appropriate mitigation and response actions. By collecting and analysing security information from different layers of the infrastructure, organisations can improve their ability to understand attack activity, determine the impact of security incidents, and take timely corrective actions.
+Within a defence-in-depth architecture, security monitoring provides visibility across multiple security layers, including Windows endpoints, intrusion detection systems, and network security platforms. Alerts generated by endpoint security solutions, IDS technologies such as Snort, and UTM platforms such as pfSense can provide valuable information for detecting suspicious activity and supporting incident response processes.
+Therefore, security monitoring and incident response represent a critical component of enterprise security resilience. A robust defence-in-depth strategy does not only focus on preventing attacks but also ensures that organisations have the capability to detect, analyse, contain, and recover from security incidents effectively.
+3.7 Defence-in-Depth Security Architecture for Windows Enterprise Environment
+The diagram in Figure 1a illustrates the practical defence-in-depth security architecture evaluated in this research. It demonstrates the relationship between the different security layers and how they work together to provide complementary protection for Windows enterprise environments.
+Figure 1a: Defence-in-Depth Security Architecture
+                         INTERNET
+                            │
+                            │
+                    ┌───────────────┐
+                    │   pfSense     │
+                    │      UTM      │
+                    │ Perimeter /   │
+                    │ Gateway Layer │
+                    └───────┬───────┘
+                            │
+                     Gateway Traffic
+                            │
+                 ┌──────────┴──────────┐
+                 │    ENTERPRISE LAN   │
+                 │   192.168.1.0/24    │
+                 └──────────┬──────────┘
+                            │
+             ┌──────────────┼──────────────┐
+             │              │              │
+             │              │              │
+      ┌────────────┐ ┌────────────┐ ┌────────────┐
+      │   Kali     │ │   Snort    │ │ Windows 11 │
+      │ Test /     │ │    IDS     │ │ Case Study │
+      │ Attacker   │ │ Detection  │ │  Endpoint  │
+      └────────────┘ │   Layer    │ │  Security  │
+                     └────────────┘ └────────────┘
+             │              │              │
+             └──────────────┼──────────────┘
+                            │
+                 Same-subnet communication
+                       where applicable
