@@ -183,6 +183,7 @@ Use Nmap to identify active hosts on the enterprise network.
 On Snort VM: sudo nmap -sn 192.168.1.0/24
 <img width="507" height="271" alt="image" src="https://github.com/user-attachments/assets/5ea98091-cf2d-4741-ae94-7c9f65324006" /> <img width="328" height="42" alt="image" src="https://github.com/user-attachments/assets/d98b8100-4f2c-4a8a-a0a9-3d554ebf06fb" />
 
+
 Result
 •	Windows 11 endpoint detected. 
 •	pfSense gateway detected. 
@@ -191,6 +192,7 @@ Step 2: Scan the Windows 11 Endpoint for Open Ports and Services
 Run a TCP SYN scan against the Windows 11 endpoint.
 sudo nmap -sS 192.168.1.111
 <img width="470" height="248" alt="image" src="https://github.com/user-attachments/assets/3fcb6d63-7446-462e-bad4-bf9b8e9ca159" /> <img width="249" height="81" alt="image" src="https://github.com/user-attachments/assets/84060a56-45ae-4cf0-b884-5204550ebcf0" />
+
 
 Result
 The Nmap scan identified the following open ports and associated services on the Windows 11 endpoint:
@@ -234,7 +236,8 @@ Following the successful Nmap reconnaissance scan conducted in Scenario 2, servi
 The following command was executed from the Snort host:
 sudo nmap -sV 192.168.1.111
 The -sV option instructs Nmap to perform service version detection by probing each open port to identify the associated service.
-<img width="248" height="26" alt="image" src="https://github.com/user-attachments/assets/34bce545-7491-46fd-99fb-57784d964234" /> <img width="492" height="316" alt="image" src="https://github.com/user-attachments/assets/d9cb8a2f-af44-4fab-a771-ddb14ec533e6" />
+<img width="736" height="483" alt="image" src="https://github.com/user-attachments/assets/2fe26bc6-478c-4a9a-8323-1828d7710a1f" /> 
+  <img width="248" height="26" alt="image" src="https://github.com/user-attachments/assets/34bce545-7491-46fd-99fb-57784d964234" />  
 
 Results
 The scan identified the following services on the Windows 11 endpoint:
