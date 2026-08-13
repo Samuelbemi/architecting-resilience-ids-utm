@@ -192,7 +192,7 @@ Result
 Step 2: Scan the Windows 11 Endpoint for Open Ports and Services
 Run a TCP SYN scan against the Windows 11 endpoint.
 sudo nmap -sS 192.168.1.111
-<img width="470" height="248" alt="image" src="https://github.com/user-attachments/assets/3fcb6d63-7446-462e-bad4-bf9b8e9ca159" /> <img width="249" height="81" alt="image" src="https://github.com/user-attachments/assets/84060a56-45ae-4cf0-b884-5204550ebcf0" />
+<img width="470" height="248" alt="image" src="https://github.com/user-attachments/assets/3fcb6d63-7446-462e-bad4-bf9b8e9ca159" /> <img width="451" height="61" alt="image" src="https://github.com/user-attachments/assets/bd3a8a9d-074e-40c9-b99e-079dda7d0a97" />
 
 
 Result
