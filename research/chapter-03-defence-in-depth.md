@@ -52,3 +52,5 @@ Figure 1a: Defence-in-Depth Security Architecture
                             │
                  Same-subnet communication
                        where applicable
+
+![Figure 1a: Defence-in-Depth Security Architecture](../architecture/fig-1a-defence-in-depth-security-architecture.png)
