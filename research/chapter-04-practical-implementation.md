@@ -236,10 +236,9 @@ Following the successful Nmap reconnaissance scan conducted in Scenario 2, servi
 The following command was executed from the Snort host:
 sudo nmap -sV 192.168.1.111
 The -sV option instructs Nmap to perform service version detection by probing each open port to identify the associated service.
-<img width="736" height="483" alt="image" src="https://github.com/user-attachments/assets/2fe26bc6-478c-4a9a-8323-1828d7710a1f" />     
-<img width="248" height="26" alt="image" src="https://github.com/user-attachments/assets/bef72293-c603-4d46-bc06-758b26048747" />
+<img width="416" height="270" alt="image" src="https://github.com/user-attachments/assets/16ea5cf9-3a66-4c1b-88e6-bfac6d647da9" /> <img width="376" height="40" alt="image" src="https://github.com/user-attachments/assets/09032181-c96f-4ab7-b511-bb27bff8e7af" />
 
-
+   
 Results
 The scan identified the following services on the Windows 11 endpoint:
 Port	Service	Purpose
