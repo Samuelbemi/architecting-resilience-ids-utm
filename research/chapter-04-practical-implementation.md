@@ -7,10 +7,12 @@ The experimental environment comprised the following components:
 •	Oracle VirtualBox – Virtualisation platform used to host the enterprise laboratory environment.
 •	Windows 11 Professional – Enterprise endpoint operating system configured with Microsoft Defender security features and Wireshark installed for network traffic capture and analysis.
 <img width="408" height="255" alt="image" src="https://github.com/user-attachments/assets/8d7f6ac3-525d-434d-997d-0f58e7da6f83" /> <img width="270" height="35" alt="image" src="https://github.com/user-attachments/assets/4d44f071-516b-4683-830e-91b58c8cd8dd" />
+
 •	pfSense – Deployed as the Unified Threat Management (UTM) platform, providing firewall protection, DHCP services, network traffic filtering, and perimeter security.
 •	Snort – Deployed as the Intrusion Detection System (IDS) for monitoring network traffic, detecting suspicious activity, and generating security alerts.
 •	Ubuntu Desktop: Operating system hosting the Snort Intrusion Detection System (IDS).
 <img width="437" height="284" alt="image" src="https://github.com/user-attachments/assets/d75b5baf-bea4-407b-a298-fc27805735a9" /> <img width="255" height="36" alt="image" src="https://github.com/user-attachments/assets/3399912c-3318-4d36-a736-8eab3e1365d7" />
+
 4.2 Network Topology: The experimental network topology was designed to simulate a Windows 11 enterprise environment implementing a defence-in-depth security architecture. The topology consists of three primary security components deployed as separate virtual machines within Oracle VirtualBox: a Windows 11 Professional endpoint, a Snort Intrusion Detection System (IDS), and a pfSense Unified Threat Management (UTM) platform.
 The Windows 11 Professional virtual machine represents a typical enterprise endpoint and serves as the primary system used throughout the practical evaluation. To facilitate network analysis, Wireshark was installed on the Windows 11 endpoint to capture and analyse network traffic generated during the experiments. The captured packets were used to validate network communications, observe traffic behaviour, and support the evaluation of security events detected by Snort IDS and controlled by pfSense UTM.
 The pfSense virtual machine functions as the network gateway and perimeter security device, providing firewall protection, Dynamic Host Configuration Protocol (DHCP) services, and traffic filtering between the enterprise network and external networks. Snort was deployed on an Ubuntu virtual machine to monitor network traffic, detect suspicious activity, and generate security alerts.
@@ -76,6 +78,7 @@ Practical scenario:
 o	WAN Interface 
 o	LAN Interface 
 <img width="545" height="360" alt="image" src="https://github.com/user-attachments/assets/ee2026ee-5ed3-4763-9ff1-3a8470878d1b" /> <img width="192" height="28" alt="image" src="https://github.com/user-attachments/assets/477df430-205d-45ac-8b34-a0b516b3fd19" />
+
 4.5.3 Network Interface Configuration
 This is an important section because pfSense is the gateway for this network architecture. 
 WAN Interface
@@ -101,7 +104,6 @@ The DHCP service enabled centralised management of IP address allocation within 
 •	Restricted traffic 
 •	Inbound and outbound traffic control 
 •	Network security policies 
-
 
 Example:
 Firewall rules were configured to regulate communication between the internal network and external networks, allowing legitimate traffic while providing the capability to restrict unauthorised connections.
@@ -129,8 +131,8 @@ Table 4.1: Summary of Attack Scenarios
 Scenario	Attack Scenario	Objective	Security Layer Evaluated
 Scenario 1	Baseline ICMP Connectivity and Network Visibility 
 	Establish baseline network communication and validate packet capture.	Snort IDS, pfSense UTM
-Scenario 2	TCP Port and Service Detection	Identify active hosts, open ports, and exposed services.	Windows 11, Snort IDS
-Scenario 3	Network Scanning and Reconnaissance	Assess the Windows 11 attack surface.	Windows 11 Endpoint
+Scenario 2	Network Scanning and Reconnaissance	Assess the Windows 11 attack surface.	Windows 11 Endpoint 
+Scenario 3	 TCP Port and Service Detection	Identify active hosts, open ports, and exposed services. Windows 11, Snort IDS
 Scenario 4	Windows Firewall Protection and Controlled Bypass Testing	Evaluate the effectiveness of Windows Defender Firewall and complementary security controls.	Windows Defender, Snort IDS, pfSense UTM
 Scenario 5	Snort IDS Detection and Alert Generation	Assess Snort's ability to detect suspicious network activity.	Snort IDS
 Scenario 6	pfSense UTM Traffic Filtering and Blocking
@@ -151,6 +153,7 @@ The first practical evaluation involved sending ICMP Echo Request (ping) packets
 From the Snort host, the following command was executed:
 ping 192.168.1.111 (windows 11 endpoint)
 <img width="532" height="149" alt="image" src="https://github.com/user-attachments/assets/75c9efca-03b3-47f4-947f-83ecff6e886c" /> <img width="312" height="32" alt="image" src="https://github.com/user-attachments/assets/8f4600b5-94b7-494b-bab9-1aebeea1cb5e" />
+
 Observation
 The ICMP requests were unsuccessful because Windows Defender Firewall blocks inbound ICMP Echo Requests by default. As a result, the Windows 11 endpoint did not respond to the ping requests, preventing communication between the Snort host and the endpoint.
 This behaviour demonstrates that Windows Defender Firewall provides an effective first layer of defence by restricting unsolicited inbound network traffic unless explicitly permitted.
@@ -160,13 +163,94 @@ The firewall rule was configured to permit communication from:
 •	192.168.1.1 – pfSense UTM (Default Gateway)
 •	192.168.1.110 – Snort IDS Host
 <img width="510" height="248" alt="image" src="https://github.com/user-attachments/assets/dbda8dc8-3654-41e1-9de2-6135a2543770" /> <img width="226" height="30" alt="image" src="https://github.com/user-attachments/assets/ff2b3644-d60d-43ab-8553-d08241dfda7a" />
+
 After applying the firewall rule, the ICMP connectivity test was repeated from the Snort host.
 ping 192.168.1.111
 <img width="620" height="182" alt="image" src="https://github.com/user-attachments/assets/fb2ff9d8-5d8f-47aa-acce-40d489d387de" /> <img width="494" height="35" alt="image" src="https://github.com/user-attachments/assets/6e2bff25-999d-4c6e-a9b8-d04639b42a64" />
+
 The Windows 11 endpoint responded successfully to the ICMP Echo Requests, confirming that communication had been established between the Snort IDS host and the Windows 11 endpoint.
 The same steps were carried out from pfSence UTM to windows 11 endpoint and the ping was successful.
 Result
 The successful ICMP communication confirmed that the Windows Defender Firewall had been correctly configured to permit trusted network traffic while maintaining control over inbound connections. Establishing this baseline connectivity was necessary before conducting the subsequent practical evaluations, including network reconnaissance, intrusion detection, firewall evaluation, and denial-of-service testing.
+
+Scenario 2: Network Reconnaissance (Nmap Scan)
+Objective
+To identify active hosts, open ports, and exposed services on the Windows 11 endpoint using Nmap and to evaluate the ability of Snort IDS to detect reconnaissance activities within the enterprise network.
+Security Layer Evaluated: Windows 11, Snort IDS
+Practical Procedure
+Step 1: Discover Active Hosts using sweep ping command
+Use Nmap to identify active hosts on the enterprise network.
+On Snort VM: sudo nmap -sn 192.168.1.0/24
+<img width="507" height="271" alt="image" src="https://github.com/user-attachments/assets/5ea98091-cf2d-4741-ae94-7c9f65324006" /> <img width="328" height="42" alt="image" src="https://github.com/user-attachments/assets/d98b8100-4f2c-4a8a-a0a9-3d554ebf06fb" />
+
+Result
+•	Windows 11 endpoint detected. 
+•	pfSense gateway detected. 
+•	Snort host detected. 
+Step 2: Scan the Windows 11 Endpoint for Open Ports and Services
+Run a TCP SYN scan against the Windows 11 endpoint.
+sudo nmap -sS 192.168.1.111
+<img width="470" height="248" alt="image" src="https://github.com/user-attachments/assets/3fcb6d63-7446-462e-bad4-bf9b8e9ca159" /> <img width="249" height="81" alt="image" src="https://github.com/user-attachments/assets/84060a56-45ae-4cf0-b884-5204550ebcf0" />
+
+Result
+The Nmap scan identified the following open ports and associated services on the Windows 11 endpoint:
+Port	Service	Description
+135/TCP	MSRPC	Microsoft Remote Procedure Call (RPC) service used for communication between Windows applications and network services.
+139/TCP	NetBIOS-SSN	NetBIOS Session Service used for legacy file and printer sharing over TCP/IP.
+445/TCP	Microsoft-DS	Server Message Block (SMB) service used for file sharing, printer sharing, and Active Directory communication.
+
+Analysis
+The scan confirmed that the Windows 11 endpoint was exposing several Microsoft networking services that are commonly found in enterprise environments. These services support essential organisational functions such as remote procedure calls, file sharing, and network resource access. However, they also increase the system's attack surface if not properly secured.
+Port 135 (MSRPC) is frequently targeted during reconnaissance because it provides information about Windows services and can be used as an entry point for exploiting vulnerabilities in Microsoft RPC services.
+Port 139 (NetBIOS Session Service) supports legacy network communication and file sharing. Although still used in some environments, it is often considered a security risk if exposed unnecessarily because it may disclose system information and facilitate unauthorised access.
+Port 445 (Microsoft-DS/SMB) is one of the most critical services within Windows enterprise networks. While it is essential for file sharing, printer sharing, and domain communication, it has historically been exploited by malware and ransomware families, including the WannaCry ransomware attack, making it a common target during network reconnaissance and exploitation attempts.
+The identification of these open ports demonstrates that enterprise endpoints may expose legitimate services required for business operations. Consequently, organisations should not rely solely on Windows Defender Firewall for protection. Additional security controls, such as Snort IDS for intrusion detection and pfSense UTM for network traffic filtering and perimeter protection, provide complementary layers of defence that improve visibility into reconnaissance activities and strengthen the overall security posture of the enterprise environment.
+Step 4: Monitor Snort IDS
+Monitor Snort on the Ubuntu IDS host.
+This command was run on the Snort IDS:
+sudo snort -q -c /usr/local/etc/snort/snort.lua -i <interface> -A alert_fast
+Another terminal was open and the below command was run:
+Sudo nmap -sS 192.168.1.111 
+Full scan result of snort IDS below:
+-- [0] enp0s8 -------------------------------------------------- Packet Statistics -------------------------------------------------- daq received: 4229 analyzed: 4222 allow: 4222 rx_bytes: 256365 -------------------------------------------------- codec total: 4222 (100.000%) discards: 119 ( 2.819%) arp: 18 ( 0.426%) eth: 4222 (100.000%) icmp6: 5 ( 0.118%) ipv4: 4144 ( 98.153%) ipv6: 60 ( 1.421%) tcp: 4080 ( 96.637%) udp: 119 ( 2.819%) -------------------------------------------------- Module Statistics -------------------------------------------------- ac_full searches: 115 matches: 2219 bytes: 9058 -------------------------------------------------- appid packets: 4085 processed_packets: 4085 total_sessions: 4061 service_cache_adds: 59 bytes_in_use: 9912 items_in_use: 59 -------------------------------------------------- arp_spoof packets: 18 -------------------------------------------------- back_orifice packets: 57 -------------------------------------------------- binder raw_packets: 18 new_flows: 4061 service_changes: 1 inspects: 4079 -------------------------------------------------- detection analyzed: 4222 -------------------------------------------------- http_inspect flows: 1 scans: 2 reassembles: 2 inspections: 2 responses: 1 max_concurrent_sessions: 1 total_bytes: 179 -------------------------------------------------- port_scan packets: 4204 trackers: 22 -------------------------------------------------- stream flows: 4061 total_prunes: 2022 idle_prunes_proto_timeout: 2022 tcp_timeout_prunes: 1999 udp_timeout_prunes: 22 icmp_timeout_prunes: 1 -------------------------------------------------- stream_icmp sessions: 5 max: 5 created: 5 released: 5 -------------------------------------------------- stream_tcp sessions: 3999 max: 3999 created: 3999 released: 3999 instantiated: 3999 setups: 3999 restarts: 1 syn_trackers: 3998 syn_ack_trackers: 1 segs_queued: 1 segs_released: 1 segs_used: 1 rebuilt_packets: 2 rebuilt_bytes: 185 syns: 3998 syn_acks: 11 rsts: 10 rsts_ok_rfc5961: 10 fins: 2 max_segs: 1 max_bytes: 185 flush_on_asymmetric_flow: 1 asymmetric_flows: 1 -------------------------------------------------- stream_udp sessions: 57 max: 57 created: 57 released: 57 total_bytes: 8052 -------------------------------------------------- tcp bad_tcp4_checksum: 6 bad_tcp6_checksum: 51 -------------------------------------------------- udp bad_udp4_checksum: 58 bad_udp6_checksum: 4 -------------------------------------------------- wizard tcp_scans: 1 tcp_hits: 1 udp_scans: 57 udp_misses: 57 -------------------------------------------------- Appid Statistics -------------------------------------------------- detected apps and services Application: Services Clients Users Payloads Misc Referred unknown: 57 0 0 0 0 0 -------------------------------------------------- Summary Statistics -------------------------------------------------- process signals: 1 -------------------------------------------------- timing runtime: 00:07:03 seconds: 423.548355 pkts/sec: 10 o")~ Snort exiting student@student-VirtualBox:~$ 
+
+Observation
+During the Nmap reconnaissance activity, Snort IDS was executed on the Ubuntu host to monitor network traffic generated against the Windows 11 endpoint. Snort successfully captured and analysed 4,222 packets during the test period.
+The Snort runtime statistics indicated significant TCP scanning activity, with 4,204 packets processed by the port scan detection module. Furthermore, the scan detection component identified one TCP scan event and one TCP scan hit, confirming that Snort successfully observed reconnaissance activity targeting the Windows 11 endpoint.
+The TCP stream analysis also recorded 3,998 SYN packets, demonstrating the behaviour associated with a TCP SYN reconnaissance scan. These findings demonstrate that while Windows 11 endpoint security controls may restrict access to exposed services, network-based intrusion detection provides additional visibility by identifying suspicious reconnaissance activities occurring within the enterprise network.
+Summary of the Scan result:
+port_scan
+packets: 4204
+tcp_scans: 1
+tcp_hits: 1
+Analysis
+The Nmap reconnaissance exercise demonstrated that Windows 11 exposes legitimate enterprise services that may increase the attack surface if not properly secured. Although Windows Defender Firewall provides endpoint-level protection, Snort IDS added an additional security layer by detecting reconnaissance behaviour and providing network visibility that is not available from endpoint protection alone. This show Windows Defender Firewall protects the endpoint, but IDS provides visibility into attacker behaviour before exploitation occurs.
+Scenario 3: TCP Port and Service Detection
+Objective
+To enumerate the services exposed by the Windows 11 endpoint following network reconnaissance and to assess the potential attack surface presented by these services within an enterprise environment.
+Security Layer Evaluated: Windows 11 Endpoint Security
+Procedure
+Following the successful Nmap reconnaissance scan conducted in Scenario 2, service enumeration was performed to obtain detailed information about the services running on the Windows 11 endpoint.
+The following command was executed from the Snort host:
+sudo nmap -sV 192.168.1.111
+The -sV option instructs Nmap to perform service version detection by probing each open port to identify the associated service.
+<img width="248" height="26" alt="image" src="https://github.com/user-attachments/assets/34bce545-7491-46fd-99fb-57784d964234" /> <img width="492" height="316" alt="image" src="https://github.com/user-attachments/assets/d9cb8a2f-af44-4fab-a771-ddb14ec533e6" />
+
+Results
+The scan identified the following services on the Windows 11 endpoint:
+Port	Service	Purpose
+135/TCP	MSRPC	Microsoft Remote Procedure Call used for communication between Windows services and applications.
+139/TCP	NetBIOS Session Service	Supports legacy file and printer sharing over TCP/IP.
+445/TCP	Microsoft-DS (SMB)	Provides file sharing, printer sharing, and network resource access within Windows enterprise environments.
+Analysis
+The results indicate that the Windows 11 endpoint exposes several Microsoft networking services commonly required for enterprise operations. Although these services are legitimate and necessary for administrative and business functions, they also increase the attack surface of the endpoint.
+Services such as MSRPC and SMB are frequently targeted during reconnaissance and exploitation because they can reveal valuable information about the operating system and available network resources. Historically, vulnerabilities affecting SMB have been exploited by high-profile malware and ransomware campaigns, demonstrating the importance of securing these services through timely patching, strong access controls, and network segmentation.
+This scenario demonstrates that endpoint security extends beyond enabling Windows Defender Firewall. Organisations should regularly identify and review exposed ports and services to minimise unnecessary exposure while ensuring that essential business services remain available. The findings reinforce the importance of integrating endpoint security with complementary security controls, such as Snort IDS for network intrusion detection and pfSense UTM for network and perimeter protection, as part of a defence-in-depth security architecture.
+Remark
+The service enumeration confirmed that the Windows 11 endpoint exposes legitimate enterprise services that support normal business operations but also contribute to the system's attack surface. Effective enterprise security therefore requires continuous monitoring, vulnerability management, and layered security controls to reduce the likelihood of these services being exploited by attackers.
+
+
+
 
 
 
