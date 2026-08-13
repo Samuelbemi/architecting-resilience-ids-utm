@@ -237,8 +237,8 @@ The following command was executed from the Snort host:
 sudo nmap -sV 192.168.1.111
 The -sV option instructs Nmap to perform service version detection by probing each open port to identify the associated service.
 <img width="736" height="483" alt="image" src="https://github.com/user-attachments/assets/2fe26bc6-478c-4a9a-8323-1828d7710a1f" />     
+<img width="248" height="26" alt="image" src="https://github.com/user-attachments/assets/bef72293-c603-4d46-bc06-758b26048747" />
 
-  <img width="248" height="26" alt="image" src="https://github.com/user-attachments/assets/34bce545-7491-46fd-99fb-57784d964234" />  
 
 Results
 The scan identified the following services on the Windows 11 endpoint:
