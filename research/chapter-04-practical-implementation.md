@@ -240,7 +240,6 @@ The -sV option instructs Nmap to perform service version detection by probing ea
 <img width="416" height="270" alt="image" src="https://github.com/user-attachments/assets/16ea5cf9-3a66-4c1b-88e6-bfac6d647da9" /> <img width="255" height="40" alt="image" src="https://github.com/user-attachments/assets/45fd4aa0-2e27-40fc-b8ad-b56396de38d2" />
 
 
-   
 Results
 The scan identified the following services on the Windows 11 endpoint:
 Port	Service	Purpose
@@ -253,6 +252,31 @@ Services such as MSRPC and SMB are frequently targeted during reconnaissance and
 This scenario demonstrates that endpoint security extends beyond enabling Windows Defender Firewall. Organisations should regularly identify and review exposed ports and services to minimise unnecessary exposure while ensuring that essential business services remain available. The findings reinforce the importance of integrating endpoint security with complementary security controls, such as Snort IDS for network intrusion detection and pfSense UTM for network and perimeter protection, as part of a defence-in-depth security architecture.
 Remark
 The service enumeration confirmed that the Windows 11 endpoint exposes legitimate enterprise services that support normal business operations but also contribute to the system's attack surface. Effective enterprise security therefore requires continuous monitoring, vulnerability management, and layered security controls to reduce the likelihood of these services being exploited by attackers.
+
+Scenario 4: Windows Firewall Protection and Controlled Bypass Testing
+Objective
+To evaluate the effectiveness of Windows Defender Firewall in restricting unauthorised inbound network connections and to assess the behaviour of complementary security controls when a controlled connection attempt is made from an unauthorised source.
+Present Network Setup:
+•	Windows 11 = protected endpoint 
+•	Kali Linux (192.168.1.113) = controlled test/attacker source 
+•	Windows Firewall = endpoint protection 
+•	192.168.1.1 and 192.168.1.110 = explicitly permitted sources 
+•	192.168.1.113 = not in the permitted source list
+Security Layers Evaluated
+•	Windows Defender Firewall – Endpoint traffic control 
+•	Snort IDS – Network traffic monitoring and detection 
+•	pfSense UTM – Network and perimeter traffic control 
+
+Practical Procedure
+Step 1 Verify the Windows Firewall baseline
+On the Windows 11 machine (192.168.1.111):
+1.	Press Windows + R. 
+2.	Type: wf.ms
+
+<img width="510" height="224" alt="image" src="https://github.com/user-attachments/assets/c01d3f2a-4c3b-42e4-be80-5853afc62c80" /> <img width="614" height="304" alt="image" src="https://github.com/user-attachments/assets/7633f7a3-ef3e-489c-b0e6-7cac8f4138ee" />  <img width="428" height="36" alt="image" src="https://github.com/user-attachments/assets/0c0310c2-9acb-4e3d-b2e3-120240ee075e" />
+
+
+
 
 
 
