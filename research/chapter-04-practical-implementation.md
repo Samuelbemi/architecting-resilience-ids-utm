@@ -11,7 +11,7 @@ The experimental environment comprised the following components:
 •	pfSense – Deployed as the Unified Threat Management (UTM) platform, providing firewall protection, DHCP services, network traffic filtering, and perimeter security.
 •	Snort – Deployed as the Intrusion Detection System (IDS) for monitoring network traffic, detecting suspicious activity, and generating security alerts.
 •	Ubuntu Desktop: Operating system hosting the Snort Intrusion Detection System (IDS).
-<img width="437" height="284" alt="image" src="https://github.com/user-attachments/assets/d75b5baf-bea4-407b-a298-fc27805735a9" /> <img width="376" height="40" alt="image" src="https://github.com/user-attachments/assets/81f612e3-398f-4f8b-bc1f-be57f37a828e" />
+<img width="437" height="284" alt="image" src="https://github.com/user-attachments/assets/d75b5baf-bea4-407b-a298-fc27805735a9" />  <img width="255" height="36" alt="image" src="https://github.com/user-attachments/assets/b0c2278a-db11-4f37-a122-9c5425959a67" />
 
 
 4.2 Network Topology: The experimental network topology was designed to simulate a Windows 11 enterprise environment implementing a defence-in-depth security architecture. The topology consists of three primary security components deployed as separate virtual machines within Oracle VirtualBox: a Windows 11 Professional endpoint, a Snort Intrusion Detection System (IDS), and a pfSense Unified Threat Management (UTM) platform.
