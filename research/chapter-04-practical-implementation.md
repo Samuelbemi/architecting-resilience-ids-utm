@@ -275,7 +275,8 @@ On the Windows 11 machine (192.168.1.111):
 1.	Press Windows + R. 
 2.	Type: wf.ms
 
-<img width="510" height="224" alt="image" src="https://github.com/user-attachments/assets/c01d3f2a-4c3b-42e4-be80-5853afc62c80" /> <img width="614" height="304" alt="image" src="https://github.com/user-attachments/assets/7633f7a3-ef3e-489c-b0e6-7cac8f4138ee" />  <img width="428" height="36" alt="image" src="https://github.com/user-attachments/assets/0c0310c2-9acb-4e3d-b2e3-120240ee075e" />
+<img width="510" height="224" alt="image" src="https://github.com/user-attachments/assets/c01d3f2a-4c3b-42e4-be80-5853afc62c80" /> <img width="614" height="304" alt="image" src="https://github.com/user-attachments/assets/7633f7a3-ef3e-489c-b0e6-7cac8f4138ee" />  <img width="428" height="36" alt="image" src="https://github.com/user-attachments/assets/2fb82678-ad5d-492b-8dbb-d60cf2881af3" />
+
 
 
 
