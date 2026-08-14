@@ -1,7 +1,9 @@
 
 4.0	Practical Implementation and Experimental Environment: This section presents the practical implementation of the defence-in-depth security architecture developed for this research. It describes the experimental environment used to evaluate the effectiveness of Windows 11(case study) endpoint security, Snort Intrusion Detection System (IDS), and pfSense Unified Threat Management (UTM) within a simulated enterprise network. The section outlines the research environment, network topology, endpoint configuration, and the deployment of each security component, providing the technical foundation for the practical evaluation presented in the subsequent sections.
+
 4.1 Research Environment: The research environment was designed to simulate a Windows 11 enterprise network using a virtualised infrastructure. A laboratory environment was established to evaluate the effectiveness of a defence-in-depth security architecture by integrating Windows 11 endpoint security, Snort Intrusion Detection System (IDS), and pfSense Unified Threat Management (UTM). This controlled environment enabled the deployment, configuration, monitoring, and evaluation of the different security layers under realistic enterprise networking conditions.
 The virtualised environment was implemented using Oracle VirtualBox, with each security component deployed as a dedicated virtual machine. This approach provided an isolated and flexible platform for configuring the enterprise network, monitoring network traffic, and evaluating the interaction between endpoint, network, and perimeter security controls.
+
 4.1a Network Architecture
 The experimental environment comprised the following components:
 •	Oracle VirtualBox – Virtualisation platform used to host the enterprise laboratory environment.
@@ -22,6 +24,7 @@ The network topology provides the foundation for evaluating how Windows 11 endpo
 <img width="490" height="691" alt="image" src="https://github.com/user-attachments/assets/8b885c37-836f-4ca1-9be2-ceeb93c29a41" /> <img width="291" height="37" alt="image" src="https://github.com/user-attachments/assets/bb6a2dfe-dbfe-422c-98be-eba29713ac17" />
 
 Figure 4.2.1 illustrates the experimental network topology implemented for this research. All communications between the Windows 11 endpoint and external networks are routed through the pfSense UTM, while Snort monitors network traffic to detect suspicious activities. Wireshark, installed on the Windows 11 endpoint, was used solely for packet capture and traffic analysis during the practical evaluation. Together, these components provide the technical foundation for assessing the effectiveness of a defence-in-depth security architecture in securing Windows 11 enterprise environments.
+
 4.3 Windows 11 Endpoint Configuration: The Windows 11 Professional virtual machine was configured to represent a typical enterprise endpoint within the experimental network. The endpoint served as the primary system for evaluating the effectiveness of Windows 11 built-in security controls as the first layer of defence within the proposed defence-in-depth security architecture.
 The Windows 11 endpoint was configured with the following security features and components:
 •	Microsoft Defender Antivirus – Enabled to provide real-time protection against malware and other malicious software.
@@ -32,8 +35,11 @@ The Windows 11 endpoint was configured with the following security features and 
 •	Wireshark – Installed to capture and analyse network traffic generated during the practical evaluation. Packet captures were used to observe network communications and support the analysis of security events detected by the IDS and controlled by the UTM.
 The Windows 11 endpoint was configured to obtain its IP address automatically from the DHCP service provided by the pfSense UTM. This configuration enabled seamless communication within the simulated enterprise network while ensuring that all inbound and outbound network traffic passed through the pfSense gateway.
 The configured endpoint served as the primary target system throughout the practical evaluation. It was used to generate network traffic, simulate normal user activity, and observe how Windows 11 endpoint security, Snort IDS, and pfSense UTM interacted as complementary security layers within a defence-in-depth architecture. 
+
 4.4 Snort IDS Deployment 
+
 4.4.1 Overview of Snort Deployment: Snort was deployed as the Network-Based Intrusion Detection System (NIDS) within the experimental environment to provide continuous monitoring of network traffic traversing the enterprise network. Operating as an additional security layer within the proposed defence-in-depth architecture, Snort was configured to inspect network packets, identify suspicious activities, and generate security alerts based on predefined detection rules. This deployment enabled the evaluation of Snort's capability to complement Windows 11 endpoint security by providing enhanced network visibility and intrusion detection. 
+
 4.4.2 Installation: The Snort IDS was deployed on an Ubuntu virtual machine within the Oracle VirtualBox environment. The installation included the Ubuntu operating system, Snort software, and the supporting software packages required for packet capture, rule processing, and traffic analysis. Once installed, Snort was configured to operate as a Network-Based Intrusion Detection System capable of monitoring network traffic within the simulated enterprise environment.
 The installation environment consisted of:
 •	Operating System: Ubuntu Desktop 26.04
@@ -41,6 +47,7 @@ The installation environment consisted of:
 •	Deployment Type: Network-Based Intrusion Detection System (NIDS)
 •	Installation Method: Source/Binary installation (specify the method used)
 •	Supporting Dependencies: Libpcap, DAQ (where applicable), PCRE, and other required software libraries. 
+
 4.4.3 Network Configuration: Following installation, Snort was integrated into the enterprise network and configured to monitor communications between the Windows 11 endpoint and other devices within the laboratory environment. The monitoring interface was configured to capture and inspect network packets traversing the enterprise network, enabling the detection of suspicious activities during the practical evaluation.
 The network configuration included:
 •	Static IP address assignment for the Snort virtual machine.
@@ -49,6 +56,7 @@ The network configuration included:
 •	Configuration of the external network (EXTERNAL_NET).
 •	Network connectivity with the Windows 11 endpoint through the enterprise LAN.
 •	Verification of packet capture and network communication. 
+
 4.4.4 Snort Rule Configuration: Following the network configuration, Snort was configured with an appropriate rule set to enable the detection of suspicious network activities within the experimental environment. Detection rules were configured to inspect network traffic, identify predefined attack signatures, and generate alerts whenever suspicious or potentially malicious activity was observed.
 The rule configuration included:
 •	Configuration of the HOME_NET and EXTERNAL_NET variables.
@@ -58,14 +66,18 @@ The rule configuration included:
 •	Configuration of alert logging and output formats.
 •	Validation of the rule set to ensure successful loading before commencing the practical evaluation.
 The configured rule set enabled Snort to detect and report security events generated during the experimental attack scenarios, providing the network visibility required to evaluate its contribution within the proposed defence-in-depth security architecture. 
+
 4.4.5 Deployment Validation: Following installation and configuration, Snort was successfully validated to ensure that it was operating correctly within the experimental environment. Validation activities included verifying successful service startup, confirming the loading of detection rules, testing packet capture on the monitoring interface, and generating sample network traffic to confirm that security alerts were produced as expected.
 The successful validation confirmed that Snort was fully operational and ready for use during the practical evaluation presented in the subsequent sections of this research. 
+
 4.5 pfSense UTM Deployment
+
 4.5.1 Overview of pfSense Deployment:
 •	pfSense was deployed as the Unified Threat Management (UTM) platform. 
 •	It acts as the network gateway between the enterprise LAN and external networks. 
 •	It provides perimeter security controls including firewall protection, DHCP services, traffic filtering, and network monitoring. 
 •	It complements Windows 11 endpoint security and Snort IDS by providing network-level protection. 
+
 4.5.2 Installation and Initial Configuration:
 •	pfSense version 
 •	Deployment method (Virtual Machine in Oracle VirtualBox) 
@@ -94,6 +106,7 @@ LAN Interface
 Interface	Purpose	Configuration
 WAN	External network connection	DHCP/NAT
 LAN	Internal enterprise network	Static IP 
+
 4.5.4 DHCP Server Configuration:
 pfSense is configured as DHCP server, include:
 •	DHCP enabled on LAN interface 
@@ -110,12 +123,14 @@ The DHCP service enabled centralised management of IP address allocation within 
 
 Example:
 Firewall rules were configured to regulate communication between the internal network and external networks, allowing legitimate traffic while providing the capability to restrict unauthorised connections.
+
 4.5.6 Network Security Monitoring
 •	pfSense logs 
 •	Firewall events 
 •	Connection monitoring 
 •	Traffic visibility 
 The monitoring capability of pfSense provided visibility into network activities and supported the identification of unusual or unauthorised communication patterns during the evaluation.
+
 4.5.7 pfSense Deployment Validation
 •	pfSense dashboard screenshot 
 •	WAN/LAN status 
@@ -127,7 +142,8 @@ Validation activities:
 •	Internet/network connectivity confirmed. 
 •	Firewall rules operated as expected. 
 •	Network traffic passed through the pfSense gateway. 
-4.6 Attack Scenarios: To evaluate the effectiveness of the proposed defence-in-depth security architecture, a series of controlled attack scenarios were conducted within the experimental environment. The scenarios were designed to simulate common cyber threats encountered in Windows 11 enterprise environments and to assess the ability of Windows 11 endpoint security, Snort Intrusion Detection System (IDS), and pfSense Unified Threat Management (UTM) to prevent, detect, monitor, and respond to these threats.
+
+6 Attack Scenarios: To evaluate the effectiveness of the proposed defence-in-depth security architecture, a series of controlled attack scenarios were conducted within the experimental environment. The scenarios were designed to simulate common cyber threats encountered in Windows 11 enterprise environments and to assess the ability of Windows 11 endpoint security, Snort Intrusion Detection System (IDS), and pfSense Unified Threat Management (UTM) to prevent, detect, monitor, and respond to these threats.
 Each attack scenario focused on a specific aspect of enterprise security, including network reconnaissance, identification of open ports and exposed services, Windows Defender Firewall evasion, intrusion detection, perimeter security, and denial-of-service (DoS) attacks. Collectively, these scenarios provided a practical assessment of how multiple security layers operate together within a defence-in-depth architecture to improve the overall security posture of Windows 11 enterprise environments.
 The attack scenarios evaluated in this research are summarised in Table 4.1.
 Table 4.1: Summary of Attack Scenarios
@@ -143,6 +159,7 @@ Scenario 6	pfSense UTM Traffic Filtering and Blocking
 Scenario 7	IDS and UTM Defence Validation	Evaluate detection and response to a controlled DoS attack.	Windows 11, Snort IDS, pfSense UTM
 Scenario 8	Defence-in-Depth Security Effectiveness Evaluation
 	Assess the combined effectiveness of all security layers.	Entire Defence-in-Depth Architecture
+
 4.6.1 Attack Scenario 1
 Windows 11 IP Address: 192.168.1.111
  Snort IP Address: 192.168.1.110
@@ -275,7 +292,8 @@ On the Windows 11 machine (192.168.1.111):
 1.	Press Windows + R. 
 2.	Type: wf.ms
 
-<img width="510" height="224" alt="image" src="https://github.com/user-attachments/assets/c01d3f2a-4c3b-42e4-be80-5853afc62c80" /> <img width="614" height="304" alt="image" src="https://github.com/user-attachments/assets/7633f7a3-ef3e-489c-b0e6-7cac8f4138ee" />  <img width="428" height="36" alt="image" src="https://github.com/user-attachments/assets/2fb82678-ad5d-492b-8dbb-d60cf2881af3" />
+<img width="510" height="224" alt="image" src="https://github.com/user-attachments/assets/c01d3f2a-4c3b-42e4-be80-5853afc62c80" /> <img width="614" height="304" alt="image" src="https://github.com/user-attachments/assets/7633f7a3-ef3e-489c-b0e6-7cac8f4138ee" /> <img width="428" height="36" alt="image" src="https://github.com/user-attachments/assets/2780bbcd-ca3f-4687-be21-021b801a0abb" />
+ 
 
 
 
