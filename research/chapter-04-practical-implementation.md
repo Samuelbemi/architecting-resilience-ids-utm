@@ -79,7 +79,8 @@ Practical scenario:
 •	Network Interfaces: 
 o	WAN Interface 
 o	LAN Interface 
-<img width="545" height="360" alt="image" src="https://github.com/user-attachments/assets/ee2026ee-5ed3-4763-9ff1-3a8470878d1b" /> <img width="192" height="28" alt="image" src="https://github.com/user-attachments/assets/477df430-205d-45ac-8b34-a0b516b3fd19" />
+<img width="545" height="360" alt="image" src="https://github.com/user-attachments/assets/ee2026ee-5ed3-4763-9ff1-3a8470878d1b" /> <img width="255" height="28" alt="image" src="https://github.com/user-attachments/assets/8c8a75b6-5b20-4334-a2f8-7bb60f0a65a6" />
+
 
 4.5.3 Network Interface Configuration
 This is an important section because pfSense is the gateway for this network architecture. 
