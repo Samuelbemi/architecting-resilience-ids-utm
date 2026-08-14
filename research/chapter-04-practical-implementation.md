@@ -84,6 +84,7 @@ The successful validation confirmed that Snort was fully operational and ready f
 •	Virtual hardware configuration (only if required) 
 •	Network adapter configuration 
 •	Installation process overview 
+
 Practical scenario:
 •	Operating System: pfSense Firewall 
 •	Deployment Platform: Oracle VirtualBox 
@@ -91,6 +92,7 @@ Practical scenario:
 •	Network Interfaces: 
 o	WAN Interface 
 o	LAN Interface 
+
 <img width="545" height="360" alt="image" src="https://github.com/user-attachments/assets/ee2026ee-5ed3-4763-9ff1-3a8470878d1b" /> <img width="255" height="28" alt="image" src="https://github.com/user-attachments/assets/8c8a75b6-5b20-4334-a2f8-7bb60f0a65a6" />
 
 
