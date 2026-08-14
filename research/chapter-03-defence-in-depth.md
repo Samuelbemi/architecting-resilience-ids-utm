@@ -21,6 +21,7 @@ Therefore, security monitoring and incident response represent a critical compon
 3.7 Defence-in-Depth Security Architecture for Windows Enterprise Environment
 The diagram in Figure 1a illustrates the practical defence-in-depth security architecture evaluated in this research. It demonstrates the relationship between the different security layers and how they work together to provide complementary protection for Windows enterprise environments.
 Figure 1a: Defence-in-Depth Security Architecture
+
 <img width="339" height="49" alt="image" src="https://github.com/user-attachments/assets/1b11f705-0b05-4d59-804a-fcbf303a7c7b" /> <img width="536" height="479" alt="image" src="https://github.com/user-attachments/assets/216d58f0-8ba1-43f0-9a11-976ae9f448f6" />
 
                       
