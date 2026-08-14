@@ -174,6 +174,7 @@ Procedure
 The first practical evaluation involved sending ICMP Echo Request (ping) packets from the Snort IDS host to the Windows 11 Professional virtual machine.
 From the Snort host, the following command was executed:
 ping 192.168.1.111 (windows 11 endpoint)
+
 <img width="532" height="149" alt="image" src="https://github.com/user-attachments/assets/75c9efca-03b3-47f4-947f-83ecff6e886c" /> <img width="312" height="32" alt="image" src="https://github.com/user-attachments/assets/8f4600b5-94b7-494b-bab9-1aebeea1cb5e" />
 
 Observation
