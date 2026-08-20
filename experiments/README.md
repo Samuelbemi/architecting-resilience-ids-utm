@@ -36,10 +36,6 @@ Evaluate pfSense firewall and UTM controls by applying controlled filtering and 
 
 Evaluate the complementary operation of Snort IDS and pfSense UTM controls under controlled security-testing conditions.
 
-### Scenario 8 — Defence-in-Depth Security Effectiveness Evaluation
-
-Assess the overall effectiveness of the layered security architecture by analysing the combined contribution of Windows security controls, Snort IDS, and pfSense UTM.
-
 ## Experimental Evidence
 
 Each scenario will document, where applicable:
