@@ -12,8 +12,9 @@ The research is structured around the following major sections:
 4. Practical Implementation and Experimental Evaluation
 5. Results and Discussion
 6. Practical Recommendations for Organisations
-7. Limitations and Considerations
+7. Limitations and Future Research Considerations
 8. Conclusion
 9. References
+10. 10.	Appendix A: Technical Configuration and Test Details
 
-The research documentation will be developed alongside the practical laboratory implementation, experimental scenarios, evidence collection, and results analysis.
+
