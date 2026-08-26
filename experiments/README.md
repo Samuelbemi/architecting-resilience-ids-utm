@@ -32,10 +32,6 @@ Generate controlled network activity and evaluate Snort's ability to identify, c
 
 Evaluate pfSense firewall and UTM controls by applying controlled filtering and blocking policies and observing their effect on test traffic.
 
-### Scenario 7 — IDS and UTM Defence Validation
-
-Evaluate the complementary operation of Snort IDS and pfSense UTM controls under controlled security-testing conditions.
-
 ## Experimental Evidence
 
 Each scenario will document, where applicable:
