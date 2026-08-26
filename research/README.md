@@ -15,6 +15,6 @@ The research is structured around the following major sections:
 7. Limitations and Future Research Considerations
 8. Conclusion
 9. References
-10. 10.	Appendix A: Technical Configuration and Test Details
+10. Appendix A: Technical Configuration and Test Details
 
 
