@@ -4,11 +4,11 @@ This directory documents the practical laboratory environment used to conduct th
 
 The laboratory is implemented as a controlled virtualised cybersecurity environment and consists of the following principal components:
 
-* **Kali Linux** — controlled test/attacker machine
-* **Windows 11 Pro** — case-study enterprise endpoint
-* **Ubuntu Linux with Snort** — Intrusion Detection System (IDS)
-* **pfSense** — Unified Threat Management (UTM) platform
-* **VirtualBox** — virtualisation platform
+* **Kali Linux** - controlled test/attacker machine
+* **Windows 11 Pro** - case-study enterprise endpoint
+* **Ubuntu Linux with Snort** - Intrusion Detection System (IDS)
+* **pfSense** - Unified Threat Management (UTM) platform
+* **VirtualBox** - virtualisation platform
 
 The laboratory documentation will record the configuration, networking, deployment, and operational role of each component.
 
