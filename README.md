@@ -52,26 +52,7 @@ The research includes controlled scenarios covering:
 * Windows Firewall protection and controlled testing
 * Snort IDS detection and alert generation
 * pfSense UTM traffic filtering and blocking
-* IDS and UTM defence validation
-* Defence-in-depth security effectiveness evaluation
 
-## Repository Structure
-
-| Directory       | Purpose                                         |
-| --------------- | ----------------------------------------------- |
-| `research/`     | Research paper and supporting research material |
-| `architecture/` | Network and security architecture documentation |
-| `lab/`          | Technical laboratory configuration              |
-| `experiments/`  | Individual experimental scenarios               |
-| `evidence/`     | Screenshots, logs, and experimental evidence    |
-| `results/`      | Experimental data and analysis                  |
-| `appendix/`     | Technical commands and configuration details    |
-
-## Research Status
-
-**Status: In Progress**
-
-The repository will be updated throughout the research process as the laboratory implementation, experiments, evidence collection, analysis, and research documentation are completed.
 
 ## Author
 
