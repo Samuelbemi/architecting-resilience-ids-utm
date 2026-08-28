@@ -1,0 +1,108 @@
+6.0 Practical Recommendations for Organisations
+The findings from the practical evaluation demonstrate that effective enterprise security requires more than the deployment of an individual firewall, IDS or UTM platform. The experiments showed that Windows Defender Firewall, Snort IDS and pfSense UTM provide different but complementary security capabilities. Based on these findings, the following recommendations are proposed for organisations seeking to strengthen Windows enterprise environments through a defence-in-depth approach.
+6.1 Network Segmentation and Security Architecture
+Organisations should adopt a segmented network architecture in which critical systems, user endpoints, servers and security infrastructure are separated according to their security requirements. Network segmentation reduces the ability of an attacker who compromises one system to move laterally across the entire environment.
+The practical experiments highlighted the importance of network placement. Because the Kali testing host and Windows endpoint were located on the same subnet, their direct traffic did not necessarily traverse pfSense. This demonstrates that simply deploying a UTM at the network perimeter does not guarantee visibility or enforcement over all internal traffic.
+Organisations should therefore consider implementing appropriate VLANs, internal firewall policies and controlled routing between security zones. For example, user endpoints, servers, management systems and security-monitoring infrastructure can be placed into separate logical network segments.
+A recommended architecture should ensure that security controls are positioned according to the traffic they are expected to monitor or enforce:
+•	Endpoint controls should protect individual systems. 
+•	Internal network controls should regulate traffic between security zones. 
+•	IDS sensors should be positioned where significant east-west and north-south traffic can be observed. 
+•	UTM/firewall controls should be positioned at appropriate network boundaries and gateways. 
+Network segmentation should therefore be considered an important architectural foundation for defence-in-depth rather than relying exclusively on perimeter security.
+6.2 IDS Deployment and Monitoring
+Organisations should deploy IDS capabilities at locations where they can obtain meaningful visibility into network activity. The Snort experiment demonstrated that correct IDS placement and configuration are essential to effective detection.
+The practical evaluation also demonstrated that packet visibility does not automatically result in an IDS alert. Snort initially observed the network traffic without generating the expected alert until an appropriate detection rule was configured. This highlights the importance of maintaining accurate, relevant and regularly reviewed detection signatures.
+Organisations should therefore:
+•	Deploy IDS sensors at strategically important network locations. 
+•	Ensure that monitoring interfaces can observe the traffic of interest. 
+•	Maintain and regularly update detection rules. 
+•	Develop organisation-specific signatures where appropriate. 
+•	Monitor IDS alerts for reconnaissance, scanning and other suspicious activities. 
+•	Establish appropriate severity and prioritisation levels for alerts. 
+•	Regularly test IDS rules to verify that they continue to operate as expected. 
+Where possible, IDS alerts should be integrated into a centralised security monitoring platform or SIEM. This allows individual alerts to be correlated with firewall, endpoint and authentication events, providing greater context for security investigations.
+The results of Scenario 5 demonstrate that a correctly configured IDS can provide an important detection layer alongside preventive controls, rather than being used as a replacement for them.
+6.3 UTM and Firewall Policy Management
+Organisations should use UTM and firewall platforms to enforce explicit, policy-based controls over traffic traversing defined network boundaries. The pfSense experiment demonstrated that granular rules can successfully restrict traffic according to source address, protocol and destination port.
+Firewall policies should follow the principle of least privilege, whereby traffic is permitted only when there is a legitimate business or operational requirement.
+Recommended practices include:
+•	Restricting unnecessary inbound and outbound traffic. 
+•	Applying source- and destination-based access controls. 
+•	Restricting unnecessary ports and protocols. 
+•	Placing specific deny rules before broad allow rules where appropriate. 
+•	Regularly reviewing and removing obsolete rules. 
+•	Logging important blocked and permitted traffic. 
+•	Documenting the purpose and owner of significant firewall rules. 
+•	Testing firewall policies following configuration changes. 
+The Scenario 6 experiment demonstrated the importance of testing both blocking and restoration. Organisations should similarly validate that a firewall rule produces the intended security outcome without unnecessarily disrupting legitimate services.
+Firewall policies should also be reviewed whenever applications, network architecture or business requirements change.
+
+6.4 Windows Endpoint Security
+The Windows endpoint should not be treated as a trusted component simply because it resides inside the organisational network. The practical evaluation demonstrated that endpoint-level controls remain important even when network-level security technologies are present.
+Organisations should maintain Windows Defender Firewall or an equivalent endpoint firewall and configure it according to organisational requirements. Unnecessary inbound services should be disabled or restricted, while required services should be accessible only to authorised systems or network segments.
+Particular attention should be given to commonly exposed Windows services such as:
+•	TCP 135 — Microsoft RPC 
+•	TCP 139 — NetBIOS Session Service 
+•	TCP 445 — SMB/Microsoft-DS 
+These services may be legitimate and necessary within enterprise environments but can significantly increase the attack surface when unnecessarily exposed.
+Organisations should therefore:
+•	Apply least-privilege firewall policies. 
+•	Restrict administrative services to authorised management systems. 
+•	Disable unnecessary legacy services. 
+•	Maintain operating-system and application updates. 
+•	Use endpoint protection and anti-malware capabilities. 
+•	Monitor endpoint security events. 
+•	Protect privileged accounts using appropriate access controls and MFA. 
+•	Regularly assess exposed services through authorised vulnerability and configuration assessments. 
+The objective should not simply be to make endpoints inaccessible, but to ensure that only required communication is permitted.
+6.5 Security Monitoring and Incident Response
+The practical evaluation demonstrated that prevention and detection are separate security functions. Consequently, organisations should establish processes for continuously monitoring security events and responding to detected activity.
+Snort alerts, firewall logs and Windows security events should ideally be collected and correlated within a centralised monitoring environment. This allows security teams to identify relationships between apparently separate events.
+For example, a potential sequence could be:
+Network reconnaissance
+        ↓
+Firewall event
+        ↓
+IDS detection
+        ↓
+Endpoint security event
+        ↓
+Security investigation
+        ↓
+Incident response
+Organisations should establish documented incident-response procedures covering:
+1.	Detection - identify suspicious activity. 
+2.	Analysis - determine the source, target and nature of the activity. 
+3.	Containment - restrict affected systems or traffic. 
+4.	Eradication - remove the underlying threat. 
+5.	Recovery - restore normal operations. 
+6.	Lessons learned - improve controls based on the incident. 
+Security alerts should also be prioritised according to their potential impact. Excessive low-value alerts can lead to alert fatigue, reducing the ability of security teams to identify genuinely important incidents.
+Regular testing of monitoring and incident-response processes is therefore recommended to ensure that security controls produce actionable information rather than simply generating large volumes of logs.
+6.6 Operational Considerations for Enterprise Deployment
+The practical laboratory demonstrated that technical effectiveness depends heavily on configuration, positioning, maintenance and operational processes. Consequently, organisations should consider the operational requirements of deploying a defence-in-depth architecture at enterprise scale.
+First, security controls should be deployed according to a clearly documented architecture. Organisations should identify which control is responsible for prevention, detection, monitoring and response at each point in the network.
+Second, configuration changes should be managed through formal change-management processes. Firewall rules, IDS signatures and endpoint security policies should not be modified without appropriate documentation, testing and approval.
+Third, organisations should regularly validate their security controls through controlled testing. The experiments conducted in this research demonstrate the value of validating security controls empirically rather than assuming that a configured rule necessarily produces the intended security outcome.
+Operational considerations should include:
+•	Configuration management - maintain documented and controlled configurations. 
+•	Rule lifecycle management - regularly review firewall and IDS rules. 
+•	Patch management - maintain current operating systems and security platforms. 
+•	Performance monitoring - ensure security controls can process enterprise traffic volumes. 
+•	Redundancy and availability - minimise security-control single points of failure. 
+•	Staff training - ensure administrators understand the technologies and their limitations. 
+•	Log retention - retain sufficient security evidence for investigations and compliance. 
+•	Regular security testing - validate controls through authorised assessments. 
+•	Incident-response exercises - periodically test organisational readiness. 
+•	Continuous improvement - update the security architecture as threats, technologies and business requirements change. 
+Finally, organisations should recognise that defence-in-depth is an architectural and operational strategy rather than a collection of individual security products. Adding multiple technologies without understanding their placement, interaction and limitations does not automatically create effective defence-in-depth.
+The findings from this research indicate that a more resilient approach is achieved when endpoint protection, IDS monitoring and UTM/firewall enforcement are deliberately positioned, correctly configured, continuously monitored and regularly tested as complementary layers of security. This approach provides organisations with multiple opportunities to prevent, detect and respond to malicious activity before it can result in significant compromise.
+
+
+
+
+
+
+
+
