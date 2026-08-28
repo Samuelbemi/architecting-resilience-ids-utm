@@ -1,0 +1,31 @@
+7.0 Limitations and Future Research Considerations
+This research, “Architecting Resilience: A Practical Evaluation of IDS and UTM in a Windows Enterprise Defence-in-Depth,” was conducted within a controlled virtual laboratory environment. While the experiments successfully demonstrated the complementary effectiveness of Windows Defender Firewall, Snort IDS and pfSense UTM, several limitations should be acknowledged.
+The primary limitation was the network topology. The laboratory was largely based on a single local subnet (192.168.1.0/24), which limited the ability to evaluate security controls across multiple network segments. In particular, traffic between systems on the same subnet did not necessarily traverse the pfSense gateway, limiting the evaluation of pfSense against internal east-west traffic. The virtualised environment also did not fully replicate the scale, traffic volume and operational complexity of a physical enterprise network.
+The attack scenarios were also deliberately controlled and limited in scope. Therefore, the findings demonstrate the effectiveness of the security controls under the defined experimental conditions rather than providing comprehensive protection against all possible enterprise threats.
+Future Research
+Future research will extend this work through a second phase:
+“Architecting Resilience: A Practical Evaluation of IDS and UTM in a Windows Enterprise Defence-in-Depth II.”
+Part II will build directly upon the findings of this research by expanding the network architecture beyond the single-subnet environment and introducing extended network segments. This will provide an opportunity to evaluate IDS and UTM effectiveness against inter-subnet and east-west traffic, as well as further investigate security-control placement and traffic enforcement.
+Unlike Part I, which was conducted in a virtualised test laboratory, the proposed second phase will be conducted within a physical laboratory environment. This will provide a more realistic representation of enterprise network conditions and allow further investigation of performance, scalability, traffic visibility and defence-in-depth effectiveness.
+The two phases therefore establish a progressive research programme: Part I validates the fundamental security functions within a controlled virtual environment, while Part II will extend the architecture and evaluate its resilience within a more representative physical, multi-subnet environment.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
