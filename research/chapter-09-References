@@ -1,0 +1,16 @@
+9.0 References
+This research was primarily based on practical experimentation conducted within a controlled virtual laboratory environment, supported by the researcher's extensive professional experience in IT infrastructure, networking, systems engineering and cybersecurity.
+The laboratory architecture, configuration decisions, troubleshooting activities, experimental procedures and interpretation of results were principally informed by practical experience rather than being directly reproduced from published research.
+The following technical and professional materials were consulted as supporting resources during the development and implementation of the practical experiments:
+1.	EC-Council. Certified Ethical Hacker (CEH) Version 13: Official Courseware / Professional Series. 13th Edition. EC-Council. 
+2.	CompTIA. CompTIA Security+ Student Guide. CompTIA. 
+3.	Hack The Box. Hack The Box Academy: Cybersecurity Training and Practical Learning Resources.
+Hack The Box.
+4.	Microsoft. (2017). Microsoft Security Bulletin MS17-010: Security Update for Microsoft Windows SMB Server (4013389). Microsoft.
+Microsoft Security Bulletin MS17-010.
+5.	Microsoft. How to verify that MS17-010 is installed. Microsoft Support.
+Microsoft Security Bulletin MS17-010.
+6.	Netgate. pfSense Documentation. Official pfSense documentation covering firewall configuration, routing, DHCP, traffic filtering and network security.
+pfSense Documentation.
+7.	Snort. Snort 3 Documentation. Official documentation covering Snort installation, configuration, rules, packet inspection and intrusion detection.
+Snort 3 Documentation.
