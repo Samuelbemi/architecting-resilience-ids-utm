@@ -150,16 +150,20 @@ Each attack scenario focused on a specific aspect of enterprise security, includ
 The attack scenarios evaluated in this research are summarised in Table 4.1.
 Table 4.1: Summary of Attack Scenarios
 Scenario	Attack Scenario	Objective	Security Layer Evaluated
+
 Scenario 1	Baseline ICMP Connectivity and Network Visibility 
 	Establish baseline network communication and validate packet capture.	Snort IDS, pfSense UTM
-Scenario 2	Network Scanning and Reconnaissance	Assess the Windows 11 attack surface.	Windows 11 Endpoint 
+	
+Scenario 2	Network Scanning and Reconnaissance	Assess the Windows 11 attack surface.	Windows 11 Endpoint
+
 Scenario 3	 TCP Port and Service Detection	Identify active hosts, open ports, and exposed services. Windows 11, Snort IDS
+
 Scenario 4	Windows Firewall Protection and Controlled Bypass Testing	Evaluate the effectiveness of Windows Defender Firewall and complementary security controls.	Windows Defender, Snort IDS, pfSense UTM
+
 Scenario 5	Snort IDS Detection and Alert Generation	Assess Snort's ability to detect suspicious network activity.	Snort IDS
+
 Scenario 6	pfSense UTM Traffic Filtering and Blocking
 	Evaluate pfSense firewall and traffic filtering capabilities.	pfSense UTM
-Scenario 7	IDS and UTM Defence Validation	Evaluate detection and response to a controlled DoS attack.	Windows 11, Snort IDS, pfSense UTM
-Scenario 8	Defence-in-Depth Security Effectiveness Evaluation
 	Assess the combined effectiveness of all security layers.	Entire Defence-in-Depth Architecture
 
 4.6.1 Attack Scenario 1
@@ -201,16 +205,17 @@ Objective
 To identify active hosts, open ports, and exposed services on the Windows 11 endpoint using Nmap and to evaluate the ability of Snort IDS to detect reconnaissance activities within the enterprise network.
 Security Layer Evaluated: Windows 11, Snort IDS
 Practical Procedure
+
 Step 1: Discover Active Hosts using sweep ping command
 Use Nmap to identify active hosts on the enterprise network.
 On Snort VM: sudo nmap -sn 192.168.1.0/24
 <img width="507" height="271" alt="image" src="https://github.com/user-attachments/assets/5ea98091-cf2d-4741-ae94-7c9f65324006" /> <img width="328" height="42" alt="image" src="https://github.com/user-attachments/assets/d98b8100-4f2c-4a8a-a0a9-3d554ebf06fb" />
 
-
 Result
 •	Windows 11 endpoint detected. 
 •	pfSense gateway detected. 
 •	Snort host detected. 
+
 Step 2: Scan the Windows 11 Endpoint for Open Ports and Services
 Run a TCP SYN scan against the Windows 11 endpoint.
 sudo nmap -sS 192.168.1.111
@@ -250,7 +255,8 @@ tcp_scans: 1
 tcp_hits: 1
 Analysis
 The Nmap reconnaissance exercise demonstrated that Windows 11 exposes legitimate enterprise services that may increase the attack surface if not properly secured. Although Windows Defender Firewall provides endpoint-level protection, Snort IDS added an additional security layer by detecting reconnaissance behaviour and providing network visibility that is not available from endpoint protection alone. This show Windows Defender Firewall protects the endpoint, but IDS provides visibility into attacker behaviour before exploitation occurs.
-Scenario 3: TCP Port and Service Detection
+
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                          Scenario 3: TCP Port and Service Detection
 Objective
 To enumerate the services exposed by the Windows 11 endpoint following network reconnaissance and to assess the potential attack surface presented by these services within an enterprise environment.
 Security Layer Evaluated: Windows 11 Endpoint Security
@@ -296,6 +302,358 @@ On the Windows 11 machine (192.168.1.111):
 2.	Type: wf.ms
 
 <img width="510" height="224" alt="image" src="https://github.com/user-attachments/assets/c01d3f2a-4c3b-42e4-be80-5853afc62c80" /> <img width="614" height="304" alt="image" src="https://github.com/user-attachments/assets/7633f7a3-ef3e-489c-b0e6-7cac8f4138ee" /> <img width="428" height="36" alt="image" src="https://github.com/user-attachments/assets/2780bbcd-ca3f-4687-be21-021b801a0abb" />
+
+Step 2: Test the protected endpoint from kali
+Now we test whether the Windows Firewall rule actually restricts the unauthorised source, Kali 192.168.1.113.
+Run these commands on Kali Linux:
+ping -c 4 192.168.1.111 and sudo nmap -Pn -sS -p 135,139,445 192.168.1.111
+
+<img width="526" height="27" alt="image" src="https://github.com/user-attachments/assets/b6f65978-49e3-4027-b2e4-b69483f57007" />  <img width="517" height="173" alt="image" src="https://github.com/user-attachments/assets/fca26cfc-3b4f-45dc-9cc3-5a6ea7d2e3f9" />  <img width="526" height="27" alt="image" src="https://github.com/user-attachments/assets/b9ac82c9-b801-43e8-85b3-d1d71d4216ab" /> <img width="593" height="275" alt="image" src="https://github.com/user-attachments/assets/9ac1ceaf-b871-4692-b244-ce0bd1c9f451" />
+ 
+Result and Observation:
+The ICMP ping was unsuccessful - an indication that the inbound firewall rule is restricting the kali host from connectivity, why the TCP SYN scan results shows that tcp port was filtered. 
+
+Kali machine (192.168.1.113) can reach the Windows host at 192.168.1.111, but the three tested TCP ports are reported as filtered:
+Port	Service	Result
+135	MSRPC	Filtered
+139	NetBIOS-SSN	Filtered
+445	Microsoft-DS/SMB	Filtered
+The important observation is that the TCP port are filtered not open. This means that Windows Defender Firewall is actively blocking access to these port, preventing traffic from reaching it.
+Breakdown of the TCP SYN Stealth Scan result:
+Kali-to-Windows baseline test
+•	Source: Kali Linux — 192.168.1.113 
+•	Destination: Windows 11 — 192.168.1.111 
+•	Test: TCP SYN scan 
+•	Ports: 135, 139, 445 
+•	Host status: Up 
+•	TCP ports: Filtered 
+•	Nmap version: 7.98 
+•	MAC vendor: Oracle VirtualBox virtual NIC
+Snort IDS - Network traffic monitoring and detection 
+Step 3 - Check Snort during the same test
+Now we need to know if Snort detect the connection attempts from Kali 192.168.1.113 to Windows 192.168.1.111
+Run this command on snort host and leave snot running then repeat step 2:
+sudo snort -i enp0s8 -c /usr/local/etc/snort/snort.lua -A alert_fast
+Result of Snort displays:
+pcap DAQ configured to passive.
+Commencing packet processing
+++ [0] enp0s8
+This means Snort is running and listening on enp0s8 but does not produced any observation.
+Step 3 Result:
+Snort was operational and configured for passive packet capture on interface enp0s8. However, no corresponding Snort alert or observable event was generated during the controlled TCP scan from Kali Linux (192.168.1.113) to Windows 11 (192.168.1.111).
+Step 4 Verify whether Snort can actually see the traffic:
+On the Snort machine, we will leave Snort running and open another terminal.
+Command to run:
+sudo tcpdump -ni enp0s8 host 192.168.1.113 and host 192.168.1.111 
+
+This is only a visibility test. It does not modify anything.
+Then, from Kali, run the same scan again:
+sudo nmap -Pn -sS -p 135,139,445 192.168.1.111
+
+<img width="526" height="27" alt="image" src="https://github.com/user-attachments/assets/a8b4208c-b9a5-4d25-96ba-6158d8aa2626" />  <img width="597" height="238" alt="image" src="https://github.com/user-attachments/assets/9230dee2-a770-4a40-93d1-eb4c3599e874" />  
+
+Fig 4.6.1j output is an indication that the post are closed.
+
+Then run tcpdump on snort vm:
+student@student-VirtualBox:~$ sudo tcpdump -ni enp0s8 host 192.168.1.113 and host 192.168.1.111
+Tcpdump output:
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on enp0s8, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+13:27:20.703296 ARP, Request who-has 192.168.1.111 tell 192.168.1.113, length 46
+The displayed result means that Snort machine's enp0s8 interface can see traffic associated with Kali (192.168.1.113) attempting to resolve the MAC address of Windows (192.168.1.111).
+In other words, the Snort machine is seeing at least the Layer-2 ARP activity associated with the Kali to Windows communication, but it has not yet demonstrated that the actual TCP SYN packets are visible.
+We will leave the tcpdump running, then from kali we run this command:
+sudo nmap -Pn -sS -p 135,139,445 192.168.1.111 (The tcp syn scan displays same result as in Fig 4.6.1j).
+View the tcpdump output again:
+Tcpdump out:
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on enp0s8, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+13:27:20.703296 ARP, Request who-has 192.168.1.111 tell 192.168.1.113, length 46
+13:34:52.913370 ARP, Request who-has 192.168.1.111 tell 192.168.1.113, length 46
+13:37:58.399624 ARP, Request who-has 192.168.1.111 tell 192.168.1.113, length 46
+13:40:34.861407 ARP, Request who-has 192.168.1.111 tell 192.168.1.113, length 46
+From the output, tcpdump captured only ARP requests. This means that Snort sensor is seeing Layer-2 ARP requests associated with the Kali-to-Windows communication, but the TCP scan traffic itself is not visible on the Snort sensor's enp0s8 interface.
+Step 5 Verify the physical/virtual network placement
+Now we need to establish how the VMs are connected:
+On the snort VM we run the following command:
+ip addr: 
+
+<img width="233" height="27" alt="image" src="https://github.com/user-attachments/assets/3506d61d-4464-4462-8068-53603ff1245b" /> <img width="408" height="139" alt="image" src="https://github.com/user-attachments/assets/3ac9d52d-2299-4ecb-8394-032c8779127a" />
+
+Fig 4.6.1k shows the interface of snort is enp0s8
+On Kali we run the command: 
+ip addr:
+
+<img width="233" height="27" alt="image" src="https://github.com/user-attachments/assets/c0ec7687-8c3a-420f-b0a1-30c45f1fd7ce" />  <img width="462" height="174" alt="image" src="https://github.com/user-attachments/assets/7e33cff5-fc38-4dbc-b66a-a18a3467d081" />
+
+The both output shows that snort is directly connected to 192.168.1.0/24 subnet as kali.
+
+Observation
+Since Kali and Windows are communicating directly at Layer 2, the unicast TCP frames are normally delivered directly between their virtual NICs.
+The Snort VM will not automatically see those unicast frames simply because it shares the same subnet.
+That's likely why tcpdump saw the ARP broadcast but not the TCP SYN packets.
+What we deduce from the observation is that the reason why snort sees layer 2 traffic only, and not seeing the TCP traffic between Kali and Windows 11 machine, is because of the placement of Snort IDS. This is to say that Snort VM is not positioned to passively observe the direct Kali-to-Windows unicast traffic on this virtual switched network.
+Remark:
+The experimental results demonstrate that incorporating an IDS into a defence-in-depth architecture can increase network security visibility by providing an additional monitoring layer. In the experimental environment, Snort was able to observe Layer-2 broadcast activity, including ARP requests associated with reconnaissance attempts. However, the experiment also demonstrated that IDS visibility is dependent on sensor placement and network architecture; Snort did not automatically observe direct unicast TCP traffic exchanged between hosts on the same virtual network.
+
+Recommended Architecture will be: 
+
+<img width="315" height="389" alt="image" src="https://github.com/user-attachments/assets/b2a1e826-d667-4877-8ca9-ed88dc488f58" />  <img width="257" height="27" alt="image" src="https://github.com/user-attachments/assets/8397893c-bbdb-4677-ab6b-034d4195b35d" />
+
+Scenario 4 - pfSense UTM Effectiveness
+pfSense UTM – Network and perimeter traffic control 
+Establish pfSense baseline
+Before proceeding we need to first establish that the Kali machine can reach the destination through the pfSense gateway. 
+We are trying confirm that traffic from pfSense is routed default via 192.168.1.1 which means that pfSense is kali gateway.
+
+On kali run: iproute
+
+<img width="464" height="27" alt="image" src="https://github.com/user-attachments/assets/3b725c6b-8933-4ee9-8ce3-89f10583046c" />  <img width="445" height="138" alt="image" src="https://github.com/user-attachments/assets/3614b177-3343-4002-8aa1-6e60edcecd84" />
+
+This experiment validates pfSense’s ability to enforce network-level policy on gateway-bound traffic. 
+Practical
+Current configuration:
+pfSense: 192.168.1.1
+Kali:    192.168.1.113
+Windows: 192.168.1.111
+Network: 192.168.1.0/24
+Step 1 – Create the pfSense blocking rule
+Now we will create a controlled firewall rule.
+In pfSense:
+Firewall → Rules
+Select the interface where Kali's traffic enters pfSense — most likely LAN in your current configuration.
+Add a rule with:
+Action:       Block
+Interface:    LAN
+Address Family: IPv4
+Protocol:     ICMP
+Source:       Single host
+Source IP:    192.168.1.113
+Destination:  Any
+
+<img width="499" height="186" alt="image" src="https://github.com/user-attachments/assets/555e8054-5d58-47a5-9a8f-0101c4857d97" />  <img width="359" height="27" alt="image" src="https://github.com/user-attachments/assets/089c3905-e2c7-4ace-b527-080e418aa418" />
+
+Step 2 – Check kali egress traffic
+We will ping google.com ip address
+On Kali ru:
+Ping -c 4 8.8.8.8
+
+<img width="502" height="199" alt="image" src="https://github.com/user-attachments/assets/00ad0d4d-6d69-478a-9c00-d2ffe2730b07" />  <img width="272" height="27" alt="image" src="https://github.com/user-attachments/assets/58e0bd58-94a2-497b-b97a-8d60acd0f4a3" /> 
+
+Figure 4.6.1p: The failed ping attempt to google.com confirms that pfSense successfully enforced the outbound traffic blocking rule for the Kali host.
+Step 3 Reverse the Rule to allow egress traffic
+In pfSense:
+Firewall → Rules
+Select the interface where Kali's traffic enters pfSense — most likely LAN in your current configuration.
+Add a rule with:
+Action:       Pass
+Interface:    LAN
+Address Family: IPv4
+Protocol:     ICMP
+Source:       Single host
+Source IP:    192.168.1.113
+Destination:  Any
+
+<img width="517" height="211" alt="image" src="https://github.com/user-attachments/assets/5574939c-187b-432c-aaac-f794993bdb92" />  <img width="375" height="32" alt="image" src="https://github.com/user-attachments/assets/c1553c3d-67a3-4c44-a696-a5a54198e790" /> 
+
+Step 4 – Check kali egress traffic
+We will ping google.com ip address
+On Kali run:
+Ping -c 4 8.8.8.8
+
+<img width="585" height="150" alt="image" src="https://github.com/user-attachments/assets/2c0b52f0-7b54-4459-963c-36c0cba2ca10" />  <img width="272" height="27" alt="image" src="https://github.com/user-attachments/assets/73c7d474-81ca-40cf-b086-14f18b1e2364" />
+
+Figure 4.6.1r: The successful ping to google.com confirms that pfSense successfully enforced the outbound traffic allowing rule for the Kali host.
+Remark
+This experiment validates pfSense’s ability to enforce network-level policy on gateway-bound traffic. By Blocking and allowing outbound egress from Kali, we prove that pfSense effectively controls and restricts traffic attempting to traverse the gateway.
+Scenario 5 - Snort IDS Detection and Alert Generation
+Objective:
+Assess Snort's ability to detect and generate alerts for suspicious network activity.
+The key distinction is:
+•	Scenario 2: Can Snort observe TCP port/service detection? 
+•	Scenario 3: Can Snort observe reconnaissance/scanning activity? 
+•	Scenario 5: Can Snort actively identify traffic as suspicious and generate an IDS alert?
+So this time, we need an activity that matches a Snort detection rule, rather than simply producing traffic that Snort can see. The important question is whether Snort can actually see the traffic generated by Kali.
+Snort IDS Detection and Alert Generation, we will work with:
+•	Interface: enp0s8 
+•	Snort configuration: /usr/local/etc/snort/snort.lua 
+•	Alert mode: alert_fast 
+•	Snort IP: 192.168.1.110 
+•	Kali: 192.168.1.113 
+•	Windows: 192.168.1.111
+
+Step 1 - Verify snort current configuration
+On Snort run this command:
+Sudo snort -i enp0s8 -c /usr/local/etc/snort/snort.lua -A alert_fast
+
+<img width="177" height="28" alt="image" src="https://github.com/user-attachments/assets/4ecffafb-164a-4e33-b896-4884181399b8" /> <img width="447" height="258" alt="image" src="https://github.com/user-attachments/assets/e88fa546-7545-4454-90bf-3935f1238174" />
+
+Leave it running.
+Then, from Kali, generate the controlled traffic:
+ping -c 4 192.168.1.111 #observe snort for alert
+From the observation snort did not produce any alert.
+Next we will verify packet visibility.
+Run tcpdump on Snort:
+sudo tcpdump -ni enp0s8 host 192.168.1.113 and host 192.168.1.111
+What are proving is snort saying I observed this traffic from Kali and it matches a suspicious-activity detection rule.
+Therefore, our test should have two independent observations:
+Windows defender Blocks Kali, and Snort Detects/alerts on Kali’s traffic
+Tcpdump display result:
+tcpdump: verbose output suppressed, use -v[v]... for full protocol decode
+listening on enp0s8, link-type EN10MB (Ethernet), snapshot length 262144 bytes
+ARP, Request who-has 192.168.1.111 tell 192.168.1.113
+This output means tcpdump is running correctly and listening on enp0s8, this proves that the Snort VM is now seeing Layer 2 traffic associated with the Kali to Windows communication.
+Leave tcpdump running and run this command:
+ping -c 4 192.168.1.111  #and look at tcpdump, it should show display ICMP echo request
+The tcpdump is not show ICMP echo request. This means that Snort VM is not receiving the direct Kali to Windows unicast traffic, the reason Snort is not generating an alert.
+For our Scenario 5 experiment, the ideal situation is:
+1.	ARP succeeds - proving Layer 2 connectivity. 
+2.	ICMP request reaches Windows - proving the test traffic exists. 
+3.	Windows Firewall blocks the ICMP/IP traffic - demonstrating endpoint enforcement. 
+4.	Snort sees the traffic - demonstrating IDS visibility. 
+5.	Snort generates an alert - demonstrating detection. 
+I checked windows 11 ip configuration and notice the ip address is automatic ip address assigning (APIPA). Then I restarted Windows 11.
+On Kali ping 192.168.1.111 #and check tcpdump on snort vm
+
+
+<img width="329" height="27" alt="image" src="https://github.com/user-attachments/assets/856068c1-5d21-45f3-aa65-4d1bbdf95ff9" />  <img width="604" height="213" alt="image" src="https://github.com/user-attachments/assets/87b03ca3-bb5c-4c3f-becf-908174429a75" />
+
+Fig 4.6.5.2, illustrate network packet capture via tcpdump on the Snort sensor confirmed that ICMP echo request packets originating from the Kali endpoint (192.168.1.113) were successfully received at the Snort monitoring interface (enp0s8) bound for the Windows 11 target (192.168.1.111). This validates Layer 2/3 reachability and demonstrates full packet visibility at the IDS inspection point.
+As shown in Figure 4.6.5.1, Snort did not generate an alert when Kali pinged the Windows 11 target. This indicates that Snort's active rule set is not currently configured to trigger alerts for this ICMP traffic.
+Step 2 - Configure Snort rule to generate an alert:
+Press Control + C to stop the running Snort
+Run this command:
+sudo grep -n "ips =" /usr/local/etc/snort/snort.lua
+IPS output: 188:ips =
+This confirms that the active snort.lua contains the ips configuration at line 188.
+Run the following command to list the rule files available within the Snort installation directory:
+sudo find /usr/local/etc/snort -type f -name "*.rules" –print
+Rule Installation Output:
+usr/local/etc/snort/sensitive_data.rules
+/usr/local/etc/snort/file_magic.rules
+/usr/local/etc/snort/lua/sensitive_data.rules
+/usr/local/etc/snort/lua/file_magic.rules
+This confirms that the current installation has rule files, but none of those are appropriate for Scenario 5 custom ICMP detection test.
+Validate the original snort configuration
+Run this command:
+Sudo snort -T -c /usr/local/etc/snort/snort.lua     # -T means test
+
+
+<img width="271" height="27" alt="image" src="https://github.com/user-attachments/assets/c1c84586-c567-45dc-b59a-5c93411ab455" />  <img width="503" height="91" alt="image" src="https://github.com/user-attachments/assets/a13bf79b-5444-4c3c-9dc6-f0785b21237b" />
+
+Figure 4.6.5.3 verifies that the Snort configuration file is valid and free of syntax errors.
+Step 3 - Create a Dedicated Rule for Scenario 5
+Run this command:
+sudo nano /usr/local/etc/snort/scenario5.rules
+put this inside the nano file: alert icmp 192.168.1.113 any -> 192.168.1.111 any (msg:"SCENARIO 5 - ICMP activity from Kali to Windows"; sid:1000001; rev:1;)
+This means:
+•	alert - generate an IDS alert 
+•	icmp - inspect ICMP traffic 
+•	192.168.1.113 - Kali/source 
+•	192.168.1.111 - Windows/destination 
+•	msg - identify the experiment 
+•	sid:1000001 - our locally defined signature ID 
+•	rev:1 - rule revision
+Now we will stop the current Snort process and start Snort with Scenario 5 rule:
+Command to run:
+sudo snort -i enp0s8 -c /usr/local/etc/snort/snort.lua -R /usr/local/etc/snort/scenario5.rules -A alert_fast
+From Kali:
+ping -c 4 192.168.1.111
+Remember, Windows firewall is still configured to reject traffic from: Kali 192.168.1.113, we actually don't need Windows to reply. We only need the ICMP echo requests to be generated and visible to Snort.
+Step 4 – Watch Snot
+Snort has generated an alert: 
+
+<img width="250" height="27" alt="image" src="https://github.com/user-attachments/assets/0ecb8d0a-5146-48ea-97d5-d6858811c9c6" />  <img width="511" height="310" alt="image" src="https://github.com/user-attachments/assets/e84e9efb-18d5-4ab2-948a-a365743025b6" />
+
+Figure 4.6.5.4 shows Snort can observe network traffic and, when a configured detection signature matches the traffic, generate an IDS alert independently of the endpoint's firewall enforcement.
+
+Scenario 5 gives us three separate pieces of evidence
+
+Test stage	Result	Evidence
+Packet visibility	Successful	tcpdump captured ICMP
+Detection	Successful	Snort SID 1000001 matched
+Alert generation	Successful	4 Snort alerts generated
+
+Snort SID means signature.
+Remark:
+Scenario 5 demonstrated that, when correctly positioned and configured with an appropriate detection signature, Snort (IDS) can observe network traffic, match predefined suspicious activity, and generate IDS alerts identifying the source, destination, protocol and timestamp.
+Scenario 6 - pfSense UTM Traffic Filtering and Blocking
+Objective:
+To evaluate the ability of pfSense (UTM) to enforce network level traffic filtering and blocking policies on traffic traversing the gateway.
+Security Layer Evaluated: pfSense UTM
+To evaluate the ability of pfSense to enforce network-level traffic filtering and blocking policies on traffic traversing the gateway.
+Experimentation:
+Step 1 - Established the Baseline
+Test 1 - Baseline: Prove that Kali can access HTTPS through pfSense.
+On Kali, run:
+ping -c 4 8.8.8.8
+Then test HTTPS:
+curl -I --connect-timeout 10 https://microsoft.com
+
+<img width="250" height="28" alt="image" src="https://github.com/user-attachments/assets/2d7084cd-bccb-4866-b971-3b904bab6547" /> <img width="481" height="213" alt="image" src="https://github.com/user-attachments/assets/e8cd2af7-8bf0-49fb-8a96-33ff22c20d30" /> <img width="761" height="308" alt="image" src="https://github.com/user-attachments/assets/abf93985-799b-4078-b477-dbf1480de585" />  <img width="250" height="27" alt="image" src="https://github.com/user-attachments/assets/8ef8402f-c423-4c8e-977f-21863272dd43" />
+
+The baseline test and HTTPS connection were verified as successful, as demonstrated in Figures 4.6.6.1 and 4.6.6.2 respectively.
+Step 2 - Create the pfSense TCP/443 block rule
+Create a new firewall rule to block HTTPS traffic from Kali
+Field	Setting
+Action	Block
+Interface	LAN
+Address Family	IPv4
+Protocol	TCP
+Source	Single host
+Source address	192.168.1.113
+Destination	Any
+Destination Port	HTTPS (443)
+Description	SCENARIO 6 - Block Kali HTTPS Traffic
+
+<img width="584" height="160" alt="image" src="https://github.com/user-attachments/assets/a98405f0-0116-4ee9-a57e-0366cae5e58e" /> <img width="864" height="144" alt="image" src="https://github.com/user-attachments/assets/b069cdd5-e89e-433c-8b0f-a40ab5627cbf" /> <img width="890" height="66" alt="image" src="https://github.com/user-attachments/assets/2d61b2f2-52f9-442d-9fce-d2a7940f81a4" /> <img width="878" height="154" alt="image" src="https://github.com/user-attachments/assets/b1d3747e-00eb-4f16-bd13-12933c1c1db7" /> <img width="911" height="55" alt="image" src="https://github.com/user-attachments/assets/f80bd96f-0aac-494b-9642-49789d2a4e5f" /> <img width="395" height="33" alt="image" src="https://github.com/user-attachments/assets/9bf8e44b-43a4-4df1-a23a-fc53ae86e5f9" />
+
+Step 3 – Test the Block
+From Kali:
+curl -I --connect-timeout 10 https://example.com
+
+<img width="467" height="80" alt="image" src="https://github.com/user-attachments/assets/4ee9c0ff-eb11-423d-8d69-894f3a9ec78a" />  <img width="268" height="33" alt="image" src="https://github.com/user-attachments/assets/e8228b0c-ff13-4f6f-ba6e-39b9a27b965d" />
+
+Step 3 – Restore Connectivity
+The firewall block rule will now be removed.
+
+<img width="395" height="33" alt="image" src="https://github.com/user-attachments/assets/c3e52526-e1a5-4507-a70b-533aaf9105c2" /> <img width="554" height="187" alt="image" src="https://github.com/user-attachments/assets/a0ac4ec6-4cae-476d-97d9-578b1a6ef936" /> <img width="891" height="172" alt="image" src="https://github.com/user-attachments/assets/598e5a2a-49f3-4894-acf2-76bef216d2c3" /> <img width="903" height="92" alt="image" src="https://github.com/user-attachments/assets/695bf586-58cb-4f3f-bd55-cee54b915273" /> <img width="881" height="130" alt="image" src="https://github.com/user-attachments/assets/1370537c-eabd-499c-8aa7-30c264c8444b" />
+
+Step 4 – Test the Unblock Rule
+From Kali run: 
+curl -I --connect-timeout 10 https://microsoft.com
+
+<img width="598" height="242" alt="image" src="https://github.com/user-attachments/assets/84299584-e99f-480c-92b1-7d43489c3fd6" /> <img width="411" height="33" alt="image" src="https://github.com/user-attachments/assets/47a6e060-5f28-4138-b426-c21ad8241a5f" />
+
+Remark:
+The experiment successfully demonstrated the effectiveness of UTM as a network-level traffic enforcement control. pfSense (UTM) successfully identified and blocked TCP traffic destined for port 443 originating from the Kali Linux attacker/test host (192.168.1.113), preventing Kali from accessing HTTPS services through the gateway. Upon removal of the blocking rule, HTTPS connectivity from Kali was successfully restored, confirming that the observed disruption was attributable to the pfSense (UTM) firewall policy. The results demonstrate that UTM can enforce granular, policy-based traffic filtering on gateway-bound traffic, providing an additional layer of defence beyond endpoint-based controls.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
  
 
 
@@ -313,4 +671,27 @@ On the Windows 11 machine (192.168.1.111):
 
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+ 
 
